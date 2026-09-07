@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "135465818327",
+    "project_id": "bbs-gold",
+    "storage_bucket": "bbs-gold.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:135465818327:android:30dd94ef2b70796970f892",
+        "android_client_info": {
+          "package_name": "com.bbsgold.myapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAyr11RAmmgEsTkb49pZJQhxeWPN7niFoY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

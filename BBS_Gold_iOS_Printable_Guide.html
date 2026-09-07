@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BBS Gold - Windows Testing & App Review Guide</title>
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; line-height: 1.6; color: #333; max-width: 850px; margin: 40px auto; padding: 20px; }
+        h1 { color: #000; border-bottom: 3px solid #0056b3; padding-bottom: 10px; margin-bottom: 30px; }
+        h2 { color: #1a1a1a; border-bottom: 1px solid #ccc; padding-bottom: 8px; margin-top: 40px; }
+        h3 { color: #333; margin-top: 25px; }
+        code { background-color: #fce4e4; color: #d6336c; padding: 2px 6px; border-radius: 4px; font-family: 'Courier New', Courier, monospace; font-size: 0.95em; }
+        pre { background-color: #1e1e1e; color: #d4d4d4; padding: 15px; border-radius: 8px; overflow-x: auto; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        pre code { background-color: transparent; color: inherit; padding: 0; }
+        .highlight { background-color: #e9ecef; border-left: 5px solid #0056b3; padding: 15px; margin: 20px 0; border-radius: 0 4px 4px 0; }
+        .critical { background-color: #fff3cd; border-left: 5px solid #ffc107; padding: 15px; margin: 20px 0; }
+        ul li, ol li { margin-bottom: 10px; }
+        
+        @media print {
+            body { max-width: 100%; margin: 0; padding: 0; font-size: 12pt; }
+            pre { background-color: #f8f9fa; color: #000; border: 1px solid #ccc; box-shadow: none; white-space: pre-wrap; }
+            pre code { color: #000; }
+            h2 { page-break-after: avoid; }
+            .page-break { page-break-before: always; }
+        }
+    </style>
+</head>
+<body>
+
+    <h1>BBS Gold - Windows Testing & App Review Guide</h1>
+    <p>This comprehensive document is intended for team members who operate on a Windows OS but need to verify app functionality and process the physical iPhone Screen Recording required by Apple App Store Review.</p>
+
+    <div class="critical">
+        <strong>Important Context:</strong> Apple App Review recently rejected the build under Guideline 2.1 due to an initialization crash on iOS devices. The codebase has been fully patched. Because building an iOS application natively via USB is banned by Apple on Windows machines, this guide executes functionality testing via Web Browser and completes the iOS submission via TestFlight.
+    </div>
+
+    <h2>Part 1: Windows Environment Setup</h2>
+    <p>To successfully verify the app code on your local Windows laptop, you must install the Flutter software development kit.</p>
+
+    <h3>1. Download & Install Flutter SDK</h3>
+    <ul>
+        <li>Navigate to the <a href="https://docs.flutter.dev/get-started/install/windows">Flutter Windows Download Page</a>.</li>
+        <li>Download the latest stable Flutter SDK <code>.zip</code> file.</li>
+        <li>Extract the contents to a location like <code>C:\flutter</code> (Do not extract it into Program Files).</li>
+    </ul>
+
+    <h3>2. Add Flutter to your Environment Variables</h3>
+    <ol>
+        <li>Click the Start menu and type <strong>Environment Variables</strong>, select <em>Edit the system environment variables</em>.</li>
+        <li>Click the <strong>Environment Variables...</strong> button.</li>
+        <li>Under "User variables for [Your Name]", double-click the row titled <strong>Path</strong>.</li>
+        <li>Click <strong>New</strong> and type: <code>C:\flutter\bin</code></li>
+        <li>Click OK on all windows to save. Restart your computer (or close and re-open all your terminal windows).</li>
+    </ol>
+
+    <div class="page-break"></div>
+
+    <h2>Part 2: Project Installation & Dependencies</h2>
+    
+    <p>Once you have extracted the corrected <code>App-Corrected.zip</code> codebase, open your Command Prompt (or PowerShell).</p>
+    <pre><code># Inside your terminal, navigate to the extracted frontend folder:
+cd "C:\Path\To\BBS_Gold_Project\App"
+
+# Clear out any leftover cache dependencies
+flutter clean
+
+# Download and install the fresh packages for the app
+flutter pub get</code></pre>
+
+    <h2>Part 3: Testing App Functionality Locally on Windows</h2>
+    <p>Because you are on a Windows machine, you cannot test Apple iOS code directly via USB. Instead, use Google Chrome to instantly verify all app functions, buttons, and API flows.</p>
+    
+    <ol>
+        <li>Ensure you are still inside the project folder in your terminal.</li>
+        <li>Run the following command:
+            <pre><code>flutter run -d chrome</code></pre>
+        </li>
+        <li>The BBS Gold app will heavily optimize and launch directly inside your Google Chrome or Edge browser.</li>
+        <li>Log into the application and click through the Dashboard, Cart, and Settings to verify the platform code is 100% stable.</li>
+    </ol>
+    
+    <div class="page-break"></div>
+
+    <h2>Part 4: The iPhone Screen Recording Process (Apple Request)</h2>
+    <div class="highlight">
+        <strong>Requirement Reminder:</strong> Apple App Review has requested a <strong>physical-device screen recording</strong>. Since Windows users cannot tether an iPhone via USB for Xcode, you will use your team's Cloud/TestFlight pipeline.
+    </div>
+
+    <ol>
+        <li><strong>Trigger TestFlight Build:</strong> Upload this newly fixed codebase to your automated cloud deployment platform (such as GitHub Actions, Codemagic, etc.) just as your team did originally. 
+            <p><strong>🚨 CRITICAL MAC / PIPELINE STEP FOR SWIFT PACKAGE MANAGER:</strong> Because this app uses Swift Package Manager instead of CocoaPods, whoever opens this project on a Mac (or your CI/CD pipeline) MUST run <code>flutter clean</code>, <code>flutter pub get</code>, and <code>flutter build ios --config-only</code> in the terminal <em>before</em> opening Xcode. This correctly activates SPM inside the Xcode pipeline.</p>
+        </li>
+        <li><strong>Download on iPhone:</strong> Once the cloud finishes uploading, open the <strong>TestFlight app</strong> on your physical iPhone and download the newly processed "Ready to Test" version over Wi-Fi.</li>
+        <li><strong>Record the Screen:</strong> Open the iOS Control Center (swipe down from top right) on your iPhone and start a <strong>Screen Recording</strong>.</li>
+        <li><strong>Navigate the App:</strong> The launch crash is now eliminated. Slowly and clearly navigate through the exact flow Apple requested without visual cuts:
+            <ul>
+                <li><strong>App Launch</strong></li>
+                <li><strong>Login</strong> to an existing account</li>
+                <li><strong>Dashboard</strong></li>
+                <li><strong>Stock / Catalogue</strong> (View the product lists)</li>
+                <li><strong>Product Details</strong> (Tap on at least one product)</li>
+                <li><strong>Orders & Order History</strong></li>
+                <li><strong>Profile View</strong></li>
+                <li><strong>Logout</strong></li>
+                <li><strong>Registration & Account Deletion Flow</strong> (if applicable).</li>
+            </ul>
+        </li>
+        <li><strong>Save & Send:</strong> Stop the screen recording and save the video file. Log into the Apple App Store Connect system online, go to the active Resolution Center thread for Guideline 2.1, and <strong>attach this physical iPhone screen recording video!</strong></li>
+    </ol>
+
+    <p style="text-align: center; margin-top: 50px; font-size: 0.9em; color: #777;">
+        --- End of Document ---
+    </p>
+
+</body>
+</html>
