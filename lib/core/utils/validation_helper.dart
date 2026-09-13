@@ -63,10 +63,10 @@ abstract class ValidationHelper {
   }
 
   /// Validates Mobile Number
-  /// Rules: Required, exactly 10 digits, digits only, no alphabets/symbols
+  /// Rules: Optional; when provided, exactly 10 digits, digits only
   static String? validateMobile(String? value) {
     if (value == null || value.trim().isEmpty) {
-      return 'Mobile Number is required';
+      return null;
     }
     final trimmed = value.trim();
     if (!_mobileRegex.hasMatch(trimmed)) {

@@ -54,8 +54,8 @@ abstract class AppConstants {
       'Send your registration request for approval.';
   static const String fullNameLabel = 'Full Name';
   static const String fullNameHint = 'Enter your full name';
-  static const String mobileLabel = 'Mobile Number';
-  static const String mobileHint = '10-digit mobile number';
+  static const String mobileLabel = 'Mobile Number (Optional)';
+  static const String mobileHint = '10-digit mobile number (optional)';
   static const String emailLabel = 'Email Address';
   static const String emailHint = 'yourname@gmail.com';
   static const String userIdLabel = 'User ID';

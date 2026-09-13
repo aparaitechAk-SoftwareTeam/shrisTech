@@ -1,7 +1,7 @@
 /// DTO for Retailer Registration API Request
 class RegisterRequest {
   final String name;
-  final String mobile;
+  final String? mobile;
   final String email;
   final String shopName;
   final String address;
@@ -9,7 +9,7 @@ class RegisterRequest {
 
   const RegisterRequest({
     required this.name,
-    required this.mobile,
+    this.mobile,
     required this.email,
     required this.shopName,
     required this.address,
@@ -17,15 +17,17 @@ class RegisterRequest {
   });
 
   Map<String, dynamic> toJson() {
-    return {
+    final data = <String, dynamic>{
       'retailer_id': 'RET001',
       'business_name': shopName.trim(),
       'owner_name': name.trim(),
-      'mobile_no': (mobile.trim().toString()),
       'address': address.trim(),
       'email': email.trim().toLowerCase(),
       'password': password,
       'status': 'Pending',
     };
+    final phone = mobile?.trim() ?? '';
+    if (phone.isNotEmpty) data['mobile_no'] = phone;
+    return data;
   }
 }

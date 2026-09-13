@@ -294,7 +294,10 @@ class _RetailerProfileScreenState extends State<RetailerProfileScreen> {
         throw ApiException('User ID is invalid.');
       }
       
-      await AuthRepository().deleteAccount(userId);
+      final deleted = await AuthRepository().deleteAccount(userId);
+      if (!deleted) {
+        throw ApiException('Unable to delete the account. Please try again.');
+      }
 
       if (!mounted) return;
       Navigator.pop(context); // close loader
@@ -461,7 +464,7 @@ class _RetailerProfileScreenState extends State<RetailerProfileScreen> {
                 // Editable: Mobile Number
                 EditableTextField(
                   controller: _mobileController,
-                  label: 'Mobile Number',
+                  label: 'Mobile Number (Optional)',
                   icon: Icons.phone_android_outlined,
                   keyboardType: TextInputType.phone,
                   inputFormatters: [
@@ -472,7 +475,7 @@ class _RetailerProfileScreenState extends State<RetailerProfileScreen> {
                   isCompact: isCompact,
                   validator: (value) {
                     final text = value?.trim() ?? '';
-                    if (text.isEmpty) return 'Mobile number is required.';
+                    if (text.isEmpty) return null;
                     if (!_mobileRegex.hasMatch(text)) {
                       return 'Mobile number must be exactly 10 digits.';
                     }

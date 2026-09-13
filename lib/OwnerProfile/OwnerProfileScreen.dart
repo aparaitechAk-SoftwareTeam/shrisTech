@@ -247,7 +247,10 @@ class _OwnerProfileScreenState extends State<OwnerProfileScreen>
       }
       
       // Use existing repository abstraction pattern
-      await AuthRepository().deleteAccount(userId);
+      final deleted = await AuthRepository().deleteAccount(userId);
+      if (!deleted) {
+        throw ApiException('Unable to delete the account. Please try again.');
+      }
 
       if (!mounted) return;
       Navigator.pop(context); // close loader

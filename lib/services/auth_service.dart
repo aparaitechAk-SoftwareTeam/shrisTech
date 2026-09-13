@@ -67,7 +67,7 @@ class AuthService {
   /// Handles Retailer Registration Action using AuthRepository.
   Future<RegisterResponse> registerRetailer({
     required String name,
-    required String mobile,
+    String mobile = '',
     required String email,
     required String shopName,
     required String address,

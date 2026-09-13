@@ -127,7 +127,6 @@ class _RegistrationScreenState extends State<RegistrationScreen>
 
       _isFormValid =
           name.isNotEmpty &&
-          mobile.isNotEmpty &&
           email.isNotEmpty &&
           shopName.isNotEmpty &&
           address.isNotEmpty &&
